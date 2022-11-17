@@ -1,0 +1,47 @@
+version: '3.8'
+services:
+
+  #PHP Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: php bin/console server:run 0.0.0.0:8000
+    volumes:
+      - .:/usr/src/app/
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  #MySQL Service
+  db:
+    image: mysql:8.0
+    #container_name: db
+    restart: unless-stopped
+    tty: true
+      #ports:
+    # - "3306:3306"
+    environment:
+      MYSQL_DATABASE: news_scrapper
+      MYSQL_ROOT_PASSWORD: wasim2263
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - app-network
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
+
+#volumes
+volumes:
+  dbdata:
+    driver: local
+
