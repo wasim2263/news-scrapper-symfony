@@ -10,7 +10,7 @@ services:
     ports:
       - "3307:3306"
     environment:
-      MYSQL_DATABASE: laravel
+      MYSQL_DATABASE: news_scrapper
       MYSQL_ROOT_PASSWORD: wasim2263
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
