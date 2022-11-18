@@ -20,6 +20,7 @@
         "symfony/asset": "5.4.*",
         "symfony/console": "5.4.*",
         "symfony/doctrine-messenger": "5.4.*",
+        "symfony/dom-crawler": "^5.4",
         "symfony/dotenv": "5.4.*",
         "symfony/expression-language": "5.4.*",
         "symfony/flex": "^1.17|^2",
@@ -31,6 +32,7 @@
         "symfony/mime": "5.4.*",
         "symfony/monolog-bundle": "^3.0",
         "symfony/notifier": "5.4.*",
+        "symfony/panther": "^1.1",
         "symfony/process": "5.4.*",
         "symfony/property-access": "5.4.*",
         "symfony/property-info": "5.4.*",
@@ -48,6 +50,7 @@
         "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
+        "dbrekelmans/bdi": "^1.0",
         "doctrine/doctrine-fixtures-bundle": "^3.4",
         "phpunit/phpunit": "^9.5",
         "symfony/browser-kit": "5.4.*",
