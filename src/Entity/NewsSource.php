@@ -52,6 +52,26 @@ class NewsSource
      */
     private $image_selector;
 
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private $day_translation;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private $week_translation;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private $month_translation;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default" = false})
+     */
+    private $is_custom_date_format;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -137,6 +157,54 @@ class NewsSource
     public function setImageSelector(string $image_selector): self
     {
         $this->image_selector = $image_selector;
+
+        return $this;
+    }
+
+    public function getDayTranslation(): ?string
+    {
+        return $this->day_translation;
+    }
+
+    public function setDayTranslation(?string $day_translation): self
+    {
+        $this->day_translation = $day_translation;
+
+        return $this;
+    }
+
+    public function getWeekTranslation(): ?string
+    {
+        return $this->week_translation;
+    }
+
+    public function setWeekTranslation(?string $week_translation): self
+    {
+        $this->week_translation = $week_translation;
+
+        return $this;
+    }
+
+    public function getMonthTranslation(): ?string
+    {
+        return $this->month_translation;
+    }
+
+    public function setMonthTranslation(string $month_translation): self
+    {
+        $this->month_translation = $month_translation;
+
+        return $this;
+    }
+
+    public function isIsCustomDateFormat(): ?bool
+    {
+        return $this->is_custom_date_format;
+    }
+
+    public function setIsCustomDateFormat(bool $is_custom_date_format): self
+    {
+        $this->is_custom_date_format = $is_custom_date_format;
 
         return $this;
     }

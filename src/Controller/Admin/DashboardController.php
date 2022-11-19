@@ -25,7 +25,7 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('News Scrapper Symfony');
+            ->setTitle('News Scraper Symfony');
     }
 
     public function configureMenuItems(): iterable
