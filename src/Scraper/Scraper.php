@@ -58,7 +58,7 @@ class Scraper
             $image_path = __DIR__ . '/../../public/images/' . end($image_parts);
             $file = file_get_contents($image);
             $insert = file_put_contents($image_path, $file);
-            $news->setPicture($image_path);
+            $news->setPicture( end($image_parts));
 
             $this->entity_manager->persist($news);
             $this->entity_manager->flush();

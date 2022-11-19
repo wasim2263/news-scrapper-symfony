@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Entity;
+
 use Gedmo\Mapping\Annotation as Gedmo;
 use App\Repository\NewsRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -90,7 +91,7 @@ class News
 
     public function setPicture(?string $picture): self
     {
-        $this->picture = $picture;
+        $this->picture = 'images/' . $picture;
 
         return $this;
     }
@@ -123,7 +124,6 @@ class News
     {
         return $this->created_at;
     }
-
 
 
     public function getUpdatedAt(): ?\DateTimeInterface

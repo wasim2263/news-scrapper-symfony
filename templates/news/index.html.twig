@@ -3,5 +3,36 @@
 {% block title %}News!{% endblock %}
 
 {% block body %}
+    <div class="container">
+        <div class="row">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Short Description</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Created Date</th>
+                    <th scope="col">Last Updated</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for news in pager %}
+                <tr>
+                <th scope="row">{{ news.id }}</th>
+                    <td>{{ news.title }}</td>
+                    <td>{{ news.getShortDescription }}</td>
+                    <td><img style=" max-width:100px; max-height:100px" src="{{asset( news.getPicture) }}" /></td>
+                    <td>{{ news.getDateAdded | date('d-m-Y') }}</td>
+                    <td>{{ news.getCreatedAt | date('d-m-Y')}}</td>
+                    <td>{{ news.getLastUpdates }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {{ pagerfanta(pager, 'twitter_bootstrap5') }}
+        </div>
+    </div>
 
 {% endblock %}

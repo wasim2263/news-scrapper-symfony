@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\News;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -63,4 +64,9 @@ class NewsRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+    public function findAllQueryBuilder(): QueryBuilder
+    {
+        return $this->createQueryBuilder('n')
+            ->orderBy('n.id', 'DESC');
+    }
 }
