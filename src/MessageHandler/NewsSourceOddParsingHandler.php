@@ -21,9 +21,8 @@ class NewsSourceOddParsingHandler implements MessageHandlerInterface
         $news_source = $news_source_message->getNewsSource();
         echo "\n";
         echo('-----Odd--start--');
-        $entityManager = $this->doctrine->getManager();
-        $scraper = new Scraper($entityManager);
-        $post_count = $scraper->scrap($news_source);
+        $scraper = new Scraper();
+        $post_count = $scraper->scrap($news_source, $this->doctrine);
         echo "\n";
         echo($post_count);
         echo "\n";

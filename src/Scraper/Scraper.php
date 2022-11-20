@@ -4,27 +4,24 @@ namespace App\Scraper;
 
 use App\Entity\News;
 use App\Entity\NewsSource;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\NewsRepository;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Panther\Client;
 
 class Scraper
 {
 
-    private EntityManagerInterface $entity_manager;
 
-    public function __construct(EntityManager $entity_manager)
-    {
-        $this->entity_manager = $entity_manager;
-    }
 
-    public function scrap(NewsSource $source): int
+    public function scrap(NewsSource $source, ManagerRegistry $doctrine ): int
     {
         $collection = [];
         $client = Client::createChromeClient(__DIR__ . '/../../drivers/chromedriver');
         $crawler = $client->request('GET', $source->getUrl());
-        $crawler->filter($source->getWrapperSelector())->each(function (Crawler $c) use ($source, &$collection) {
+        $crawler->filter($source->getWrapperSelector())->each(function (Crawler $c) use ($source, &$collection, $doctrine) {
+            $entity_manager = $doctrine->getManager();
             /// this line usually by passes the ads
             if (!$c->filter($source->getTitleSelector())->count()) {
                 return;
@@ -53,9 +50,19 @@ class Scraper
             $file = file_get_contents($image);
             $insert = file_put_contents($image_path, $file);
             $news->setPicture( end($image_parts));
-
-            $this->entity_manager->persist($news);
-            $this->entity_manager->flush();
+            try {
+                $entity_manager->persist($news);
+                $entity_manager->flush();
+            }
+            catch (UniqueConstraintViolationException $e) {
+                $doctrine->resetManager();
+                $entity_manager = $doctrine->getManager();
+                $news = $entity_manager->getRepository(News::class)->findOneBy(['title'=> $title]);
+//                echo $title;
+//                print_r($news->getId());
+                $news->setLastUpdates($news->getLastUpdates().','.(new \DateTime())->format('Y-m-d h:m'));
+                $entity_manager->flush();
+            }
             $collection[] = $news;
         });
         return count($collection);

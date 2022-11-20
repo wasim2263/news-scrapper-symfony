@@ -37,13 +37,12 @@ class NewsController extends AbstractController
     /**
      * @Route("/fetch/{id}", name="fetch")
      */
-    public function fetch(NewsSource $source, ManagerRegistry $doctrine)
+    public function fetch(NewsSource $source,  ManagerRegistry $doctrine)
     {
-        $entityManager = $doctrine->getManager();
-        $scraper = new Scraper($entityManager);
-        $posts = $scraper->scrap($source);
+        $scraper = new Scraper();
+        $posts_count = $scraper->scrap($source, $doctrine);
 
-        return $this->json($posts->toArray());
+        return $this->json($posts_count);
     }
     /**
      * @Route("/parse-news-manually", name="parse_news_manually")
