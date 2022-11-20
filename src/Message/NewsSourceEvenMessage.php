@@ -4,7 +4,7 @@ namespace App\Message;
 
 use App\Entity\NewsSource;
 
-class NewsSourceMessage
+class NewsSourceEvenMessage
 {
     private $news_source;
 

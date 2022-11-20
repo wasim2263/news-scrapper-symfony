@@ -3,7 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\NewsSource;
-use App\Message\NewsSourceMessage;
+use App\Message\NewsSourceEvenMessage;
+use App\Message\NewsSourceOddMessage;
 use App\Repository\NewsRepository;
 use App\Repository\NewsSourceRepository;
 use App\Scraper\Scraper;
@@ -49,8 +50,14 @@ class NewsController extends AbstractController
      */
     public function parseNewsManually(NewsSourceRepository  $news_source_repository, MessageBusInterface $bus): JsonResponse
     {
-        $source = $news_source_repository->find(1);
-        $bus->dispatch(new NewsSourceMessage($source));
+        $sources = $news_source_repository->findAll();
+        foreach($sources as $source){
+            if($source->getId()%2 == 0){
+                $bus->dispatch(new NewsSourceEvenMessage($source));
+            }else{
+                $bus->dispatch(new NewsSourceOddMessage($source));
+            }
+        }
         return $this->json(["success"=>true]);
     }
 }

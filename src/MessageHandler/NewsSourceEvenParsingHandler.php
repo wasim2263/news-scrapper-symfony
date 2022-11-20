@@ -2,13 +2,12 @@
 
 namespace App\MessageHandler;
 
-use App\Entity\NewsSource;
-use App\Message\NewsSourceMessage;
+use App\Message\NewsSourceEvenMessage;
 use App\Scraper\Scraper;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-class NewsParsingHandler implements MessageHandlerInterface
+class NewsSourceEvenParsingHandler implements MessageHandlerInterface
 {
     private ManagerRegistry $doctrine;
 
@@ -16,17 +15,17 @@ class NewsParsingHandler implements MessageHandlerInterface
         $this->doctrine = $doctrine;
     }
 
-    public function __invoke(NewsSourceMessage $news_source_message)
+    public function __invoke(NewsSourceEvenMessage $news_source_message)
 {
     $news_source = $news_source_message->getNewsSource();
-    print_r('---------');
-    print_r( $news_source->getId());
-    print_r($news_source->getName());
+    echo "\n";
+    echo('-----Even--start--');
     $entityManager = $this->doctrine->getManager();
     $scraper = new Scraper($entityManager);
-    $posts = $scraper->scrap($news_source);
+    $post_count = $scraper->scrap($news_source);
     echo "\n";
-    print_r($posts->count());
+    echo($post_count);
     echo "\n";
+    echo('-----Even--end--');
 }
 }

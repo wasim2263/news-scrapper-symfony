@@ -4,12 +4,8 @@ namespace App\Scraper;
 
 use App\Entity\News;
 use App\Entity\NewsSource;
-use App\Repository\NewsRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use phpDocumentor\Reflection\Type;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Panther\Client;
 
@@ -23,7 +19,7 @@ class Scraper
         $this->entity_manager = $entity_manager;
     }
 
-    public function scrap(NewsSource $source): Collection
+    public function scrap(NewsSource $source): int
     {
         $collection = [];
         $client = Client::createChromeClient(__DIR__ . '/../../drivers/chromedriver');
@@ -38,10 +34,7 @@ class Scraper
             /// Find and filter the title
             $title = $c->filter($source->getTitleSelector())->text();
             $news->setTitle($title);
-//            dd($title);
-            /// some websites using datetime attribute in <time> tag to store the full
-            /// date time, here we first checked if this attribute exists, otherwise we fetch the
-            /// text inside the tag.
+
             $date_time = $c->filter($source->getDateSElector())->attr('datetime');
             if (!$date_time) {
                 $date_time = $c->filter($source->getDateSElector())->text();
@@ -52,6 +45,7 @@ class Scraper
 
             $description = ($c->filter($source->getDescriptionSelector())->last()->text());
             $news->setShortDescription($description);
+            //    TODO::make it generic
             $image = ($c->filter($source->getImageSelector())->attr('data-lazy-src'));
 
             $image_parts = explode('/', $image);
@@ -64,7 +58,7 @@ class Scraper
             $this->entity_manager->flush();
             $collection[] = $news;
         });
-        return new ArrayCollection($collection);
+        return count($collection);
     }
 
     /**
@@ -72,6 +66,7 @@ class Scraper
      *
      * @throws \Exception
      */
+//    TODO::make it generic
     private function cleanupDate(NewsSource $source, string $date_time): \DateTime
     {
         $date = new \DateTime();
