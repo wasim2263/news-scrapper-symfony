@@ -1,4 +1,6 @@
 # news-scrapper-symfony
-# php bin/console doctrine:fixtures:load
-php bin/console doctrine:schema:update --force
+# docker-compose exec app php bin/console make:migration
+# docker-compose exec app php bin/console doctrine:migrations:migrate 
+# docker-compose exec app php bin/console doctrine:schema:update --force 
+# docker-compose exec app php bin/console doctrine:fixtures:load
 php bin/console messenger:consume async -vv
