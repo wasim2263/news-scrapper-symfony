@@ -47,7 +47,7 @@ class Scraper
             $news->setShortDescription($description);
             //    TODO::make it generic
             $image = ($c->filter($source->getImageSelector())->attr('data-lazy-src'));
-
+            //    TODO::make it common function or apply different file saving method
             $image_parts = explode('/', $image);
             $image_path = __DIR__ . '/../../public/images/' . end($image_parts);
             $file = file_get_contents($image);
