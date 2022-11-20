@@ -13,6 +13,7 @@ services:
       - 8000:8000
     depends_on:
       - db
+      - rabbitmq
     networks:
       - app-network
 
@@ -32,6 +33,13 @@ services:
     volumes:
       - dbdata:/var/lib/mysql
       - ./mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - app-network
+  rabbitmq:
+    image: rabbitmq:3.9-management
+    ports:
+      - '5672:5672'
+      - '15672:15672'
     networks:
       - app-network
 

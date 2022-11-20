@@ -3,14 +3,18 @@
 namespace App\Controller;
 
 use App\Entity\NewsSource;
+use App\Message\NewsSourceMessage;
 use App\Repository\NewsRepository;
+use App\Repository\NewsSourceRepository;
 use App\Scraper\Scraper;
 use Doctrine\Persistence\ManagerRegistry;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class NewsController extends AbstractController
@@ -39,5 +43,14 @@ class NewsController extends AbstractController
         $posts = $scraper->scrap($source);
 
         return $this->json($posts->toArray());
+    }
+    /**
+     * @Route("/parse-news-manually", name="parse_news_manually")
+     */
+    public function parseNewsManually(NewsSourceRepository  $news_source_repository, MessageBusInterface $bus): JsonResponse
+    {
+        $source = $news_source_repository->find(1);
+        $bus->dispatch(new NewsSourceMessage($source));
+        return $this->json(["success"=>true]);
     }
 }
