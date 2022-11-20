@@ -48,7 +48,7 @@ class NewsController extends AbstractController
     /**
      * @Route("/parse-news-manually", name="parse_news_manually")
      */
-    public function parseNewsManually(NewsSourceRepository  $news_source_repository, MessageBusInterface $bus): JsonResponse
+    public function parseNewsManually(Request $request, NewsSourceRepository  $news_source_repository, MessageBusInterface $bus): Response
     {
         $sources = $news_source_repository->findAll();
         foreach($sources as $source){
@@ -58,6 +58,20 @@ class NewsController extends AbstractController
                 $bus->dispatch(new NewsSourceOddMessage($source));
             }
         }
-        return $this->json(["success"=>true]);
+        $route = $request->headers->get('referer');
+        return $this->redirect($route);    }
+    /**
+     * @Route("/news/delete/{id}", name="news_delete")
+     */
+    public function delete(int $id,NewsRepository $news_repository, ManagerRegistry $doctrine, Request $request): Response
+    {
+        $news = $news_repository->find($id);
+        $entity_manager = $doctrine->getManager();
+        $entity_manager->remove($news);
+        $entity_manager->flush();
+
+        $route = $request->headers->get('referer');
+
+        return $this->redirect($route);
     }
 }

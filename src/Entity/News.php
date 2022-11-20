@@ -5,9 +5,11 @@ namespace App\Entity;
 use Gedmo\Mapping\Annotation as Gedmo;
 use App\Repository\NewsRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=NewsRepository::class)
+ * @UniqueEntity("title")
  */
 class News
 {
@@ -19,7 +21,8 @@ class News
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=500)
+     *
+     * @ORM\Column(type="string", length=500, unique=true)
      */
     private $title;
 

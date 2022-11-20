@@ -4,6 +4,10 @@
 
 {% block body %}
     <div class="container">
+        <div >
+            <a role="button" class=" btn btn-primary" href="{{ path('parse_news_manually') }}"> Scrap now</a>
+
+        </div>
         <div class="row">
             <table class="table">
                 <thead>
@@ -27,6 +31,11 @@
                     <td>{{ news.getDateAdded | date('d-m-Y') }}</td>
                     <td>{{ news.getCreatedAt | date('d-m-Y')}}</td>
                     <td>{{ news.getLastUpdates }}</td>
+                    <td>
+                        {%if is_granted('ROLE_ADMIN') %}
+                        <a role="button" class=" btn btn-danger" href="{{ path('news_delete', {id: news.id}) }}"> Delete</a>
+                    {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
                 </tbody>
