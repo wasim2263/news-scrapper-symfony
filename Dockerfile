@@ -21,7 +21,8 @@ RUN apt-get update -y && apt-get install -y \
     libasound2 \
     chromium \
     chromium-driver \
-    cron
+    cron \
+    vim
 
 #    && pecl install amqp
 
@@ -41,6 +42,9 @@ RUN composer install;
 ENV PANTHER_NO_SANDBOX 1
 ENV PANTHER_CHROME_ARGUMENTS='--disable-dev-shm-usage --disable-gpu --disable-extensions --remote-debugging-port=9222'
 
-RUN echo "*/5 * * * * root php /app/bin/console  app:scrap-news >> /var/log/cron.log 2>&1" >> /etc/crontab
+#RUN echo "*/5 * * * * root php /app/bin/console  app:scrap-news >> /var/log/cron.log 2>&1" >> /etc/crontab
 
+COPY my-crontab /etc/cron.d/my-crontab
+RUN chmod 0644 /etc/cron.d/my-crontab && crontab /etc/cron.d/my-crontab
+RUN touch /var/log/cron.log
 EXPOSE 8000
