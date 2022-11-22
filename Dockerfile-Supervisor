@@ -21,10 +21,9 @@ RUN apt-get update -y && apt-get install -y \
     libasound2 \
     chromium \
     chromium-driver \
-    vim
-
-#    && pecl install amqp
-
+    vim \
+    supervisor \
+    cron
 
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -40,3 +39,13 @@ RUN composer install;
 
 ENV PANTHER_NO_SANDBOX 1
 ENV PANTHER_CHROME_ARGUMENTS='--disable-dev-shm-usage --disable-gpu --disable-extensions --remote-debugging-port=9222'
+
+COPY news-scrapper-crontab /etc/cron.d/news-scrapper-crontab
+
+RUN chmod 0644 /etc/cron.d/news-scrapper-crontab && crontab /etc/cron.d/news-scrapper-crontab
+RUN touch /var/log/cron.log
+
+COPY supervisor/supervisord.conf /etc/supervisor
+COPY supervisor/* /etc/supervisor/conf.d/
+
+EXPOSE 8000

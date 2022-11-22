@@ -40,18 +40,20 @@ services:
       - rabbitmq
     networks:
       - app-network
-  #PHP Service
-#  message-consume:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile-Message-Consume
-#    command: php bin/console messenger:consume async -vv
-#    volumes:
-#      - .:/usr/src/app/
-#    depends_on:
-#      - app
-#    networks:
-#      - app-network
+  #PHP message Service
+  message-consume:
+    build:
+      context: .
+      dockerfile: Dockerfile-Supervisor
+    command: supervisord -c /etc/supervisor/supervisord.conf
+    volumes:
+      - .:/usr/src/app/
+    depends_on:
+      - app
+      - db
+      - rabbitmq
+    networks:
+      - app-network
 
 
 

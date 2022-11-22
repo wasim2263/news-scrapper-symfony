@@ -60,7 +60,8 @@ class Scraper
                 $news = $entity_manager->getRepository(News::class)->findOneBy(['title'=> $title]);
 //                echo $title;
 //                print_r($news->getId());
-                $news->setLastUpdates($news->getLastUpdates().','.(new \DateTime())->format('Y-m-d h:m'));
+                $last_five_updates  = implode(",",array_slice(explode(",",$news->getLastUpdates()), -5));
+                 $news->setLastUpdates($last_five_updates.','.(new \DateTime())->format('Y-m-d h:m'));
                 $entity_manager->flush();
             }
             $collection[] = $news;
